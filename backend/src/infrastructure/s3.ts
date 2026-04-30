@@ -1,3 +1,4 @@
+// backend\src\infrastructure\s3.ts
 import { Client } from 'minio';
 
 export const minioClient = new Client({
