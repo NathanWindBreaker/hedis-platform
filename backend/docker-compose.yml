@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Реляционная база данных PostgreSQL (Атрибуты и Метаданные)
+  postgres:
+    image: postgres:15-alpine
+    container_name: edge-relational-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=edge_db
+    volumes:
+      - ./infra/postgres/data:/var/lib/postgresql/data
+  # Графовая база данных neo4j
+  neo4j:
+    image: neo4j:latest
+    container_name: edge-graph-db
+    ports:
+      - "7474:7474" # Интерфейс управления
+      - "7687:7687" # Bolt протокол (для API)
+    environment:
+      - NEO4J_AUTH=neo4j/password # Сменю пароль потом
+    volumes:
+      - ./infra/neo4j/data:/data
+      - ./infra/neo4j/logs:/logs
+
+  # Объектное хранилище (S3) minio
+  minio:
+    image: minio/minio
+    container_name: edge-object-storage
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Консоль управления
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=password
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./infra/minio/data:/data
+
+volumes:
+  neo4j_data:
+  minio_data:

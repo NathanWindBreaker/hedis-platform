@@ -1,0 +1,38 @@
+// 1. Генератор клиента (создает JS/TS код для работы с БД)
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 2. Источник данных (подключаем PostgreSQL)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model EntityType {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  domain      String
+  schema      Json
+  entities    Entity[]
+}
+
+model Entity {
+  id           String     @id @default(uuid())
+  typeId       String
+  type         EntityType @relation(fields: [typeId], references: [id])
+  data         Json
+  attachments  Json
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([typeId])
+}
+
+model EventLog {
+  id         String   @id @default(uuid())
+  entityId   String
+  action     String
+  payload    Json
+  timestamp  DateTime @default(now())
+}

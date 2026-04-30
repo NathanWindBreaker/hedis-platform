@@ -1,0 +1,20 @@
+{
+  "name": "edge-core",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@prisma/client": "^6.19.3",
+    "fastify": "^5.8.5",
+    "minio": "^8.0.7",
+    "neo4j-driver": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "prisma": "^6.19.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
